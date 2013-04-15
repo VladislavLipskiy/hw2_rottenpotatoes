@@ -2,6 +2,9 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.0'
 
+gem 'linecache19', '0.5.13', :path => "~/.rvm/gems/ruby-1.9.3-p392/gems/linecache19-0.5.13/"
+gem 'ruby-debug-base19', '0.11.26', :path => "~/.rvm/gems/ruby-1.9.3-p392/gems/ruby-debug-base19-0.11.26/"
+
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
