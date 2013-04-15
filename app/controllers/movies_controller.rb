@@ -7,26 +7,51 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies, @title_class, @date_class = case params[:sortBy]
+  
+    @all_ratings = Movie.possible_ratings
+    
+    args = {}
+    params.has_key?(:ratings) ? 
+    Proc.new {
+      keys = params[:ratings].keys
+      @selected_ratings = keys
+      args[:conditions] = ["rating IN (?)", keys]
+    }.call
+    : Proc.new {
+      @selected_ratings = @all_ratings
+    }.call
+    #params[:ratings].keys : @all_ratings
+    
+
+    #if params.has_key?(:ratings) do
+    #  keys = params[:ratings].keys
+    #  args[:conditions] = ["rating = ?", keys]
+    #end
+  
+    args, @title_class, @date_class = case params[:sortBy]
     when "title"
       [
-        @movies = Movie.all({:order => "title ASC"}),
+        args[:order] = "title ASC",
+        #@movies = Movie.all(args),
         @title_class = "hilite",
         @date_class = ""
       ]
     when "release_date"
       [
-        @movies = Movie.all({:order => "release_date ASC"}),
+        args[:order] = "release_date ASC",
+        #@movies = Movie.all(args),
         @title_class = "",
         @date_class = "hilite"
       ]
     else
       [
-        @movies = Movie.all,
+        args,
+        #@movies = Movie.all,
         @title_class = "",
         @date_class = ""
       ]
     end
+    @movies = Movie.all(args)
   end
 
   def new
