@@ -2,16 +2,15 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.0'
 
-#gem 'linecache19', '0.5.13', :path => "~/.rvm/gems/ruby-1.9.3-p392/gems/linecache19-0.5.13/"
-#gem 'ruby-debug-base19', '0.11.26', :path => "~/.rvm/gems/ruby-1.9.3-p392/gems/ruby-debug-base19-0.11.26/"
-
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 # for Heroku deployment - as described in Ap. A of ELLS book
 group :development, :test do
   gem 'sqlite3'
-  #gem 'ruby-debug19', :require => 'ruby-debug'
+  gem 'linecache19', '0.5.13', :path => "~/.rvm/gems/ruby-1.9.3-p392/gems/linecache19-0.5.13/"
+  gem 'ruby-debug-base19', '0.11.26', :path => "~/.rvm/gems/ruby-1.9.3-p392/gems/ruby-debug-base19-0.11.26/"
+  gem 'ruby-debug19', :require => 'ruby-debug'
 end
 group :production do
   gem 'pg'
