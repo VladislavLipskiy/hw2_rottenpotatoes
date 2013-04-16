@@ -11,6 +11,19 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.possible_ratings
     
     args = {}
+    if !params.has_key?(:ratings) and session.has_key?(:ratings)
+      hash = Hash[session[:ratings].map {|x| [x, 1]}]
+      args[:ratings] = hash
+    end
+    
+    if !params.has_key?(:sortBy) and session.has_key?(:sortBy)
+      args[:sortBy] = session[:sortBy]
+    end
+    
+    if !args.empty?
+      redirect_to movies_path(args)
+    end
+    
     params.has_key?(:ratings) ? 
     Proc.new {
       @selected_ratings = params[:ratings].empty? ? session[:ratings] : params[:ratings].keys
@@ -24,6 +37,7 @@ class MoviesController < ApplicationController
       }.call
     }.call
     
+    args = {}
     args[:conditions] = ["rating IN (?)", @selected_ratings]
     #params[:ratings].keys : @all_ratings
     
