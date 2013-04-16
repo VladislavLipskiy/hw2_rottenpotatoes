@@ -13,9 +13,8 @@ class MoviesController < ApplicationController
     args = {}
     params.has_key?(:ratings) ? 
     Proc.new {
-      keys = params[:ratings].keys
-      @selected_ratings = keys
-      session[:ratings] = keys
+      @selected_ratings = params[:ratings].empty? ? session[:ratings] : params[:ratings].keys
+      session[:ratings] = @selected_ratings
     }.call
     : Proc.new {
       session.has_key?(:ratings) ? @selected_ratings = session[:ratings] :
@@ -33,23 +32,26 @@ class MoviesController < ApplicationController
     #  keys = params[:ratings].keys
     #  args[:conditions] = ["rating = ?", keys]
     #end
+    
   
     @movies, @title_class, @date_class = case params[:sortBy]
     when "title"
       [
-        @movies = Movie.reorder("title ASC").all(args),
+        @movies = Movie.order("title ASC").all(args),
         @title_class = "hilite",
-        @date_class = ""
+        @date_class = "",
+        session[:sortBy] = params[:sortBy]
       ]
     when "release_date"
       [
-        @movies = Movie.reorder("release_date ASC").all(args),
+        @movies = Movie.order("release_date ASC").all(args),
         @title_class = "",
-        @date_class = "hilite"
+        @date_class = "hilite",
+        session[:sortBy] = params[:sortBy]
       ]
     else
       [
-        @movies = Movie.all(args),
+        @movies = session.has_key?(:sortBy) ? Movie.order(session[:sortBy]).all(args) : Movie.all(args),
         @title_class = "",
         @date_class = ""
       ]
